@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Portfolio</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+
+        header {
+            background: #222;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+
+        .profile {
+            background: white;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .profile h2 {
+            color: #333;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #4facfe;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #007bff;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>VARSHA</h1>
+    <p>KRISTU JAYANTI UNIVERSITY</p>
+</header>
+
+<div class="container">
+
+    <!-- Profile Section -->
+    <div class="profile">
+        <h2>Student Details</h2>
+        <p><b>Name:</b> VARSHA S</p>
+        <p><b>Roll No:</b> 25BCLB58 </p>
+        <p><b>Course:</b> BCA CLOUD B</p>
+        <p><b>Email:</b> 25BCLB58@KRISTUJAYANTI.COM</p>
+    </div>
+
+    <!-- Form -->
+    <form id="form">
+        <h2>Add Skills / Info</h2>
+        
+        <input type="text" id="name" placeholder="Enter Name" required>
+        <input type="email" id="email" placeholder="Enter Email" required>
+        <input type="text" id="course" placeholder="Enter course" required>
+        <input type="text" id="skills" placeholder="Enter skills" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Data Display -->
+    <div class="cards" id="data"></div>
+
+</div>
+
+<script>
+const form = document.getElementById("form");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const student = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        course: document.getElementById("course").value,
+        skills: document.getElementById("skills").value
+    };
+
+    await fetch("http://localhost:5000/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(student)
+    });
+
+    alert("Data Saved!");
+    loadData();
+});
+
+async function loadData() {
+    const res = await fetch("http://localhost:5000/students");
+    const data = await res.json();
+
+    document.getElementById("data").innerHTML =
+        data.map(d => `
+            <div class="card">
+                <h3>${d.name}</h3>
+                <p><b>Email:</b> ${d.email}</p>
+                <p><b>Course:</b> ${d.course}</p>
+                <p><b>Skills:</b> ${d.skills}</p>
+            </div>
+        `).join("");
+}
+
+loadData();
+</script>
+
+</body>
+</html>
