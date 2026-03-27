@@ -22,8 +22,7 @@ mongoose.connect(MONGO_URI, {
 const studentSchema = new mongoose.Schema({
     name: String,
     email: String,
-    course: String,
-    skills: String
+    message: String
 });
 
 const Student = mongoose.model("Student", studentSchema);
